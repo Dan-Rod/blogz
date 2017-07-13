@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    {% for page in pages %}
+        <a href='/blog?id={{page.id}}'><h2>{{page.subject}}</h2></a></li>
+        <li>{{page.body}}</li>
+    {% endfor %}
+{% endblock %}

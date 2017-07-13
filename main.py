@@ -40,7 +40,10 @@ def add_new_post():
             new_blog = Blog(blog_subject, blog_body)
             db.session.add(new_blog)
             db.session.commit()
-            return redirect('/blog')
+            
+            blog_id = new_blog.id
+            link = "/blog?id="+ str(blog_id)
+            return redirect(link)
         else:
             return render_template('newpost.html', blog_subject=blog_subject, blog_body=blog_body, subject_error=subject_error, body_error=body_error)
     else:
@@ -49,6 +52,11 @@ def add_new_post():
     
 @app.route('/blog')
 def index():
+    blog_id = request.args.get('id')
+
+    if blog_id:
+        pages = Blog.query.filter_by(id=blog_id)
+        return render_template('page.html', pages=pages)
     posts = Blog.query.all()
     return render_template('blog.html', posts=posts)
 
