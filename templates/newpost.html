@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method='POST'>
+    <label for="post_subject">Title of the post:</label><br>
+    <input type='text' name='post_subject' value='{{blog_subject}}' />
+    <p class='error'>{{subject_error}}</p><br>
+    <label for="post_body">Type your blog post here:</label><br>
+    <textarea type='text' rows="6" name='post_body'>{{blog_body}}</textarea>
+    <p class='error'>{{body_error}}</p><br>
+    <input type='submit' value='Publish' />
+</form>
+
+{% endblock %}

@@ -7,11 +7,50 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:ninja@loca
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 
-@app.route('/')
+
+class Blog(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    subject = db.Column(db.String(120))
+    body = db.Column(db.String(1000))
+
+    def __init__(self, subject, body):
+        self.subject = subject
+        self.body = body
+
+
+@app.route('/newpost', methods=['GET', 'POST'])
+def add_new_post():
+    subject_error = ''
+    body_error = ''    
+    
+    if request.method == 'POST':
+        blog_subject = request.form['post_subject']
+        blog_body = request.form['post_body']
+        
+
+
+        if not blog_subject:
+            subject_error = "You have misplaced the subject! Please try again."
+    
+        if not blog_body:
+            body_error = "You have misplaced the body! Please try again with a little more detail."
+        
+        if not subject_error and not body_error:
+            new_blog = Blog(blog_subject, blog_body)
+            db.session.add(new_blog)
+            db.session.commit()
+            return redirect('/blog')
+        else:
+            return render_template('newpost.html', blog_subject=blog_subject, blog_body=blog_body, subject_error=subject_error, body_error=body_error)
+    else:
+        return render_template('newpost.html')
+
+    
+@app.route('/blog')
 def index():
-    return "<h1>Project Setup Complete!</h1>"
-
-
+    posts = Blog.query.all()
+    return render_template('blog.html', posts=posts)
 
 
 
