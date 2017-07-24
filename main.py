@@ -136,13 +136,21 @@ def add_new_post():
     
 @app.route('/blog')
 def blog():
-    blog_id = request.args.get('id')
+    author_id = request.args.get('user')
+    post_id = request.args.get('id')
 
-    if blog_id:
-        pages = Blog.query.filter_by(id=blog_id)
-        return render_template('page.html', pages=pages)
+    if post_id and author_id:
+        pages = Blog.query.filter_by(id=post_id).all()
+        user = User.query.filter_by(id=author_id).first()
+        return render_template('page.html', pages=pages, user=user)
+    if author_id:
+        pages = Blog.query.filter_by(author_id=author_id).all()
+        user = User.query.filter_by(id=author_id).first()
+        return render_template('page.html', pages=pages, user=user)
     posts = Blog.query.all()
-    return render_template('blog.html', posts=posts)
+    user = User.query.all()
+    print(user)
+    return render_template('blog.html', posts=posts, user=user)
 
 
 @app.route('/logout')
@@ -152,7 +160,12 @@ def logout():
 
 @app.route('/')
 def index():
-    return redirect('/blog')
+    #author_id = request.args.get('id')
+    #if author_id:
+    #    users = Blog.query.filter_by(author_id=author_id)
+    #    return render_template('home.html', users=users)
+    users = User.query.all()
+    return render_template('home.html', users=users)
 
 if __name__ == '__main__':
     app.run()

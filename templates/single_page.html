@@ -2,9 +2,9 @@
 
 {% block content %}
     <h2>Look at what has been written!</h2>
-    {% for page in pages %}
-        <a href='/blog?id={{page.id}}&user={{user.id}}'><h2>{{page.subject}}</h2></a></li>
+
+        <a href='/blog?id={{page.id}}, user={{user.id}}'><h2>{{page.subject}}</h2></a></li>
         <li>{{page.body}}</li>
         <li>written by <a href='/blog?user={{user.id}}'>{{user.email}}</a></li>
-    {% endfor %}
+
 {% endblock %}
